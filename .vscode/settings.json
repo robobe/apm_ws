@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.xacro": "xml",
+        "*.world": "xml",
+        "*.sdf": "xml",
+        "*.gazebo": "xml",
+        "memory": "cpp",
+        "csignal": "cpp"
+    }
+}
