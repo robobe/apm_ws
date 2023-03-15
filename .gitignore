@@ -1,0 +1,7 @@
+build/
+install/
+log/
+eeprom.bin
+mav.tlog
+mav.tlog.raw
+terrain/
