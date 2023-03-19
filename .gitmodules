@@ -1,0 +1,3 @@
+[submodule "wiki"]
+	path = wiki
+	url = https://github.com/robobe/apm_ws.wiki.git

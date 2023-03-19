@@ -1,0 +1,22 @@
+session_name: 4-pane-split
+windows:
+  - window_name: dev window
+    layout: tiled
+    shell_command_before:
+      - cd ~/apm_ws # run as a first command in all panes
+      - ros_ws
+    panes:
+      - shell_command: # pane no. 1
+          - kill -9 gzserver
+          - kill -9 gzclient
+          - ros2 launch apm_bringup sim.launch.py
+      - shell_command:
+          - sleep 5
+          - ros2 launch apm_bringup sitl.launch.py
+      - shell_command:
+          - sleep 6
+          - mavproxy.py --master tcp:127.0.0.1:5760 --out 127.0.0.1:14550 --out 127.0.0.1:14551
+      - shell_command:
+          - sleep 7
+          - ros2 run mavros mavros_node --ros-args -p fcu_url:=udp://127.0.0.1:14550@ --params-file ~/apm_ws/src/apm_bringup/config/apm_config.yaml
+      - echo forth pane # pane no. 4

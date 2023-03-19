@@ -1,0 +1,143 @@
+<?xml version='1.0'?>
+<sdf version='1.5'>
+    <model name='test_box'>
+        <pose>0 0 0.2 0 0 0</pose>
+        <link name='base_link'>
+            <inertial>
+                <mass>1</mass>
+                <inertia>
+                    <ixx>0.026666666666666672</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.026666666666666672</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.026666666666666672</izz>
+                </inertia>
+            </inertial>
+            <visual name='box_visual'>
+
+                <geometry>
+                    <box>
+                        <size>0.4 0.4 0.4</size>
+                    </box>
+                </geometry>
+                <material>
+                    <script>
+                        <uri>file://media/materials/scripts/gazebo.material</uri>
+                        <name>Gazebo/Green</name>
+                    </script>
+                </material>
+
+            </visual>
+            <collision name='box_collision'>
+                <geometry>
+                    <box>
+                        <size>0.4 0.4 0.4</size>
+                    </box>
+                </geometry>
+
+            </collision>
+        </link>
+        <link name='child_link'>
+            <pose >0 0 0.4 0 0 0</pose>
+            <inertial>
+                <mass>1</mass>
+                <inertia>
+                    <ixx>0.026666666666666672</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.026666666666666672</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.026666666666666672</izz>
+                </inertia>
+            </inertial>
+            <visual name='box_visual'>
+
+                <geometry>
+                    <box>
+                        <size>0.4 0.4 0.4</size>
+                    </box>
+                </geometry>
+                <material>
+                    <script>
+                        <uri>file://media/materials/scripts/gazebo.material</uri>
+                        <name>Gazebo/Red</name>
+                    </script>
+                </material>
+
+            </visual>
+            <collision name='box_collision'>
+                <geometry>
+                    <box>
+                        <size>0.4 0.4 0.4</size>
+                    </box>
+                </geometry>
+
+            </collision>
+        </link>
+        <joint name="joint_base_child" type="fixed">
+            <parent>base_link</parent>
+            <child>child_link</child>
+            <pose relative_to="base_link">0 0 0.2 0 0 0</pose>
+            <axis>
+                <xyz>0 0 1</xyz>
+            </axis>
+        </joint>
+        <link name='fixed_link'>
+            <pose relative_to="child_link">0 0 0.4 0 0 0</pose>
+            <inertial>
+                <mass>1</mass>
+                <inertia>
+                    <ixx>0.026666666666666672</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.026666666666666672</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.026666666666666672</izz>
+                </inertia>
+            </inertial>
+            <visual name='box_visual'>
+
+                <geometry>
+                    <box>
+                        <size>0.4 0.4 0.4</size>
+                    </box>
+                </geometry>
+                <material>
+                    <script>
+                        <uri>file://media/materials/scripts/gazebo.material</uri>
+                        <name>Gazebo/Blue</name>
+                    </script>
+                </material>
+
+            </visual>
+            <collision name='box_collision'>
+                <geometry>
+                    <box>
+                        <size>0.4 0.4 0.4</size>
+                    </box>
+                </geometry>
+
+            </collision>
+        </link>
+        <joint name="joint_child_fixed" type="revolute">
+            <parent>base_link</parent>
+            <child>fixed_link</child>
+            <pose relative_to="child_link">0 0 0.2 0 0 0</pose>
+            <axis>
+                <xyz>0 0 1</xyz>
+            </axis>
+        </joint>
+        <plugin name="gazebo_ros_joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+            <update_rate>20</update_rate>
+            <joint_name>joint_child_fixed</joint_name>
+        </plugin>
+        <plugin name="gazebo_ros_joint_pose_trajectory" filename="libgazebo_ros_joint_pose_trajectory.so">
+            <update_rate>20</update_rate>
+        </plugin>
+    </model>
+</sdf>
+
+<!-- 
+ros2 topic pub -1 /set_joint_trajectory trajectory_msgs/msg/JointTrajectory '{header: {frame_id: world}, joint_names: [joint_child_fixed], points: [  {positions: {0.8}} ]}' 
+ -->

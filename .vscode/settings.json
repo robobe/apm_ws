@@ -6,5 +6,15 @@
         "*.gazebo": "xml",
         "memory": "cpp",
         "csignal": "cpp"
-    }
+    },
+    "python.autoComplete.extraPaths": [
+        "/home/user/apm_ws/install/apm_bringup/lib/python3.10/site-packages",
+        "/home/user/projects/ros2_sdf_ws/install/sdf_lab/lib/python3.10/site-packages",
+        "/home/user/wasp_ws/install/wasp/lib/python3.10/site-packages",
+        "/home/user/wasp_ws/install/mavros/local/lib/python3.10/dist-packages",
+        "/home/user/wasp_ws/install/mavros_msgs/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "cmake.sourceDirectory": "${workspaceFolder}/src/plugin_tutorial"
 }

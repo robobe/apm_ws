@@ -1,0 +1,13 @@
+session_name: 4-pane-split
+windows:
+  - window_name: dev window
+    layout: tiled
+    shell_command_before:
+      - cd /workspace/apm_ws # run as a first command in all panes
+      - source install/setup.bash
+    panes:
+      - shell_command: # pane no. 1
+          - ros2 run mavros mavros_node --ros-args -p fcu_url:=udp://127.0.0.1:14550@ -p pluginlists_yaml:=`pwd`/src/apm_bringup/config/mavros_plugin.yaml --params-file `pwd`/src/apm_bringup/config/apm_config.yaml
+      - echo two pane # pane no. 2
+      - echo third pane # pane no. 3
+      - echo forth pane # pane no. 4

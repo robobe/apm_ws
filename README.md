@@ -1,10 +1,16 @@
 
+## wiki
+- Add github wiki as submodule
+
+```
+git submodule add https://github.com/robobe/apm_ws.wiki.git wiki
+```
 
 ## How to run
 ```bash
 # run from apm_ws
 # Terminal 1
-ros2 launch apm_bringup sim.launch.py
+ros2 launch apm_bringup sim_and_spawn.launch.py
 
 # Terminal 2
 sim_vehicle.py -v ArduCopter -f gazebo-iris
