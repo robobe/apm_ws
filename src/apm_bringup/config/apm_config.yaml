@@ -6,6 +6,7 @@
     plugin_allowlist:
       # common
       - imu
+      - dummy_ex
     # plugin_allowlist:
     #   - scaled_pressure
     #   - altitude

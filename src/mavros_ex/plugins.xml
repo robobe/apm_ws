@@ -1,0 +1,8 @@
+<library path="mavros_ex">
+    <class name="dummy_ex" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::DummyExPlugin&gt;" base_class_type="mavros::plugin::PluginFactory">
+        <description>@brief Dummy plugin.
+      @plugin dummy
+      @example_plugin
+      Example and &quot;how to&quot; for users.</description>
+    </class>
+</library>
