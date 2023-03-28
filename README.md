@@ -28,3 +28,4 @@ mavproxy.py --out 127.0.0.1:14550 --out 127.0.0.1:14551 --out 127.0.0.1:14552 --
 
 # Resource
 - [Ardupilot Gazebo plugin](https://github.com/khancyr/ardupilot_gazebo)
+- [Ardupilot Gazebo ROS Package](https://github.com/vincekurtz/ardupilot_gazebo)

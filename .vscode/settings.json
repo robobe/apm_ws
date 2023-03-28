@@ -15,6 +15,5 @@
         "/home/user/wasp_ws/install/mavros_msgs/local/lib/python3.10/dist-packages",
         "/opt/ros/humble/lib/python3.10/site-packages",
         "/opt/ros/humble/local/lib/python3.10/dist-packages"
-    ],
-    "cmake.sourceDirectory": "${workspaceFolder}/src/plugin_tutorial"
+    ]
 }

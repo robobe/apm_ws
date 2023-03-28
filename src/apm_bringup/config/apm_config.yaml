@@ -3,10 +3,27 @@
 # node:
 /mavros/**:
   ros__parameters:
-    plugin_allowlist:
+    plugin_blacklist:
       # common
-      - imu
-      - dummy_ex
+      - actuator_control
+      - ftp
+      - safety_area
+      # extras
+      - altitude
+      - debug_value
+      - image_pub
+        #- mocap_pose_estimate
+      - px4flow
+      - vibration
+        #- 'vision_*'
+      - hil
+      - home_position
+      - obstacle
+    # plugin_allowlist:
+      # common
+      # - imu
+      # - dummy_ex
+      # - landing_target
     # plugin_allowlist:
     #   - scaled_pressure
     #   - altitude
