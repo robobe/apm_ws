@@ -6,3 +6,9 @@ mav.tlog
 mav.tlog.raw
 terrain/
 logs/
+__pycache__/
+*.pyc
+dumpstack_arducopter*
+mav.parm
+mav.tlog
+mav.tlog.raw

@@ -1,27 +1,37 @@
 # Common configuration for APM2 autopilot
 #
 # node:
+/mavros_node:
+  ros__parameters:
+    fcu_url: udp://127.0.0.1:14551@
+
 /mavros/**:
   ros__parameters:
-    plugin_blacklist:
+    fcu_protocol: v2.0
+    
+    # plugin_blacklist:
+    #   # common
+    #   - actuator_control
+    #   - ftp
+    #   - safety_area
+    #   # extras
+    #   - altitude
+    #   - debug_value
+    #   - image_pub
+    #     #- mocap_pose_estimate
+    #   - px4flow
+    #   - vibration
+    #     #- 'vision_*'
+    #   - hil
+    #   - home_position
+    #   - obstacle
+    #   - dummy_ex
+    plugin_allowlist:
       # common
-      - actuator_control
-      - ftp
-      - safety_area
-      # extras
-      - altitude
-      - debug_value
-      - image_pub
-        #- mocap_pose_estimate
-      - px4flow
-      - vibration
-        #- 'vision_*'
-      - hil
+      - imu
+      - command
       - home_position
-      - obstacle
-    # plugin_allowlist:
-      # common
-      # - imu
+      - global_position
       # - dummy_ex
       # - landing_target
     # plugin_allowlist:

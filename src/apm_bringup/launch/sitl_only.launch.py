@@ -25,8 +25,7 @@ def generate_launch_description():
     pkg = get_package_share_directory(PACKAGE)
     sitl_executable = os.path.join(pkg, "bin", "arducopter")
     copter_param = os.path.join(pkg, "config", "copter.parm")
-    gazebo_param = os.path.join(pkg, "config", "gazebo-iris.parm")
-    
+    custom_param = os.path.join(pkg, "config", "custom.parm")
 
     additional_parm_arg = DeclareLaunchArgument(
         "additional_parm", default_value="", description="additional SITL parm, full path"
@@ -39,9 +38,9 @@ def generate_launch_description():
         cmd=[[
             sitl_executable,
             ' -S ',
-            "--model gazebo-iris ",
-            f'--defaults {copter_param},{gazebo_param},{custom_param} ',
-            "-I0"
+            "--model + ",
+            f'--defaults {copter_param},{custom_param}',
+            " -I0 "
         ]],
         shell=True
     )

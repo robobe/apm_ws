@@ -3,12 +3,14 @@ from rclpy.node import Node
 from mavros_msgs.msg import Mavlink
 from mavros.mavlink import convert_to_rosmsg
 from pymavlink.dialects.v20 import ardupilotmega as MAV_APM
+from rclpy.time import Time as ROSTime
+from builtin_interfaces.msg import Time
 import time
 
 # Global position of the origin
-LAT = 41.6996 * 1e7
-LON = -86.237177 * 1e7
-ALT = 200 * 1e3
+LAT = int(41.6996 * 1e7)
+LON = int(-86.237177 * 1e7)
+ALT = int(200 * 1e3)
 
 TOPIC_MAVLINK_TO = "/uas1/mavlink_sink"
 
@@ -63,7 +65,7 @@ class MyNode(Node):
             self.timer.cancel()
 
         self.send_global_origin()
-        self.send_home_position()
+        # self.send_home_position()
         self.get_logger().info(f"Timer tick {self.counter}")
 
     def send_home_position(self):
@@ -102,8 +104,14 @@ class MyNode(Node):
     
     def send_message(self, msg):
         msg.pack(self.mav)
-        rosmsg = convert_to_rosmsg(msg)
-        self.mavlink_pub.publish(rosmsg)
+        # ros_time = ROSTime()
+        t = Time()
+        t.sec = 0
+        t.nanosec = 1
+        # t.sec, t.nanosec = ros_time.seconds_nanoseconds()
+        rosmsg = convert_to_rosmsg(msg, stamp=t)
+        
+        #self.mavlink_pub.publish(rosmsg)
 
 def main(args=None):
     rclpy.init(args=args)

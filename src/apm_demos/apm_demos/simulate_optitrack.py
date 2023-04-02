@@ -3,15 +3,17 @@ from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from mavros_msgs.msg import Mavlink
 from gazebo_msgs.srv import GetEntityState
+from geometry_msgs.msg import PoseStamped
 
 import diagnostic_updater
 import diagnostic_msgs
 
 DRONE_NO = 1
+TOPIC_POSE = f"/Robot_{DRONE_NO}/pose"
 TOPIC_MAVLINK_SOURCE = f"/uas{DRONE_NO}/mavlink_source"
 SRV_GAZEBO_ENTITY_STATE = "/gazebo/get_entity_state"
-TIMER_TICK = 1/10
-
+TIMER_TICK = 1/30
+TIMER_STATE_REQUEST = 1/10
 class DiagHelper:
     def __init__(self, node: Node) -> None:
         self.__updater = diagnostic_updater.Updater(node)
@@ -29,8 +31,11 @@ class MyNode(Node):
         node_name = "optitrack"
         super().__init__(node_name)
         self.__diag = DiagHelper(self)
+        self.__seq = 0
         self.__secs = 0
         self.__nanosec = 0
+        self.__pose = None
+        self.__pub_pose = self.create_publisher(PoseStamped, TOPIC_POSE, qos_profile=qos_profile_sensor_data)
         self.create_subscription(
             Mavlink,
             TOPIC_MAVLINK_SOURCE,
@@ -38,10 +43,11 @@ class MyNode(Node):
             qos_profile=qos_profile_sensor_data,
         )
         self.entity_state = self.create_client(GetEntityState, SRV_GAZEBO_ENTITY_STATE)
-        self.create_timer(TIMER_TICK, self.__tick_handler)
-        self.get_logger().info("Hello ROS2")
+        self.create_timer(TIMER_STATE_REQUEST, self.__get_state_handler)
+        self.create_timer(TIMER_TICK, self.__tick_timer_handler)
+        self.get_logger().info("init optitrack")
 
-    def __tick_handler(self):
+    def __get_state_handler(self):
         msg = GetEntityState.Request()
         msg.name = "iris_demo::iris_demo::iris::base_link"
         msg.reference_frame = "world"
@@ -50,8 +56,20 @@ class MyNode(Node):
 
     def __entity_state_handler(self, future):
         result: GetEntityState.Response = future.result()
-        print(result.state.pose.position)
+        self.__pose = result.state.pose
 
+    def __tick_timer_handler(self):
+        if not self.__pose:
+            return
+        pose_stamped = PoseStamped()
+        # pose_stamped.header.stamp. = self.__seq
+        pose_stamped.header.stamp.sec = self.__secs
+        pose_stamped.header.stamp.nanosec = self.__nanosec
+        pose_stamped.header.frame_id = "map"
+        pose_stamped.pose = self.__pose
+
+        self.__pub_pose.publish(pose_stamped)
+        self.__seq +=1
 
     def __mavlink_handler(self, msg: Mavlink) -> None:
         self.__secs = msg.header.stamp.sec

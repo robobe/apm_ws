@@ -44,7 +44,9 @@ setup(
             "test=apm_demos.simple_arm_and_takeoff:main",
             "simulate_optitrack=apm_demos.simulate_optitrack:main",
             "pose_republisher=apm_demos.pose_republisher:main",
-            "set_origin=apm_demos.set_origin:main"
+            "set_origin=apm_demos.set_origin:main",
+            "mav_reader_demo=apm_demos.mav_reader_demo:main",
+            "home_ekf=apm_demos.home_and_ekf_demo:main"
         ],
     },
 )
