@@ -23,6 +23,16 @@
       </axis>
     </joint>
 
+    <include>
+      <pose relative_to="iris::base_link">0 0 0.05 0 1.578 0</pose>
+      <uri>model://rangefinder</uri>
+    </include>
+
+    <joint name="rangefinder_mount" type="fixed">
+      <parent>iris::base_link</parent>
+      <child>rangefinder::link</child>
+    </joint>
+
     <!-- <include>
       <uri>model://gimbal_small_2d</uri>
       <pose>0 -0.01 0.070 1.57 0 1.57</pose>
@@ -42,7 +52,7 @@
     </joint> -->
 
 
-    <!-- plugins -->
+    <!-- range plugins -->
     <plugin name="rotor_0_blade_1" filename="libLiftDragPlugin.so">
       <a0>0.3</a0>
       <alpha_stall>1.4</alpha_stall>
@@ -250,6 +260,6 @@
         <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
       </control>
     </plugin>
-
+    <!-- endrange plugins -->
   </model>
 </sdf>

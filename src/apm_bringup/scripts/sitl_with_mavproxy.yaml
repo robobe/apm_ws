@@ -8,7 +8,7 @@ windows:
     panes:
       - shell_command:
           - rm eeprom.bin mav.*
-          - ros2 launch apm_bringup sitl_only.launch.py
+          - ros2 launch apm_bringup sitl.launch.py
       - shell_command:
           - sleep 1
           - /home/user/.local/bin/mavproxy.py --master tcp:127.0.0.1:5760 --out 127.0.0.1:14550 --out 127.0.0.1:14551

@@ -46,7 +46,9 @@ setup(
             "pose_republisher=apm_demos.pose_republisher:main",
             "set_origin=apm_demos.set_origin:main",
             "mav_reader_demo=apm_demos.mav_reader_demo:main",
-            "home_ekf=apm_demos.home_and_ekf_demo:main"
+            "home_ekf=apm_demos.home_and_ekf_demo:main",
+            "simple_server=apm_demos.simple_service_demo:main",
+            "simple_client=apm_demos.simple_client_demo:main"
         ],
     },
 )
