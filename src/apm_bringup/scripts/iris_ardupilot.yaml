@@ -11,6 +11,7 @@ windows:
           - kill -9 gzclient
           - ros2 launch apm_bringup sim.launch.py
       - shell_command:
+          - rm eeprom.bin mav.*
           - sleep 5
           - ros2 launch apm_bringup sitl.launch.py
       - shell_command:
