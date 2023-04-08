@@ -10,28 +10,33 @@
     fcu_protocol: v2.0
     
     # plugin_blacklist:
-    #   # common
-    #   - actuator_control
-    #   - ftp
-    #   - safety_area
-    #   # extras
-    #   - altitude
-    #   - debug_value
-    #   - image_pub
-    #     #- mocap_pose_estimate
-    #   - px4flow
-    #   - vibration
-    #     #- 'vision_*'
-    #   - hil
-    #   - home_position
-    #   - obstacle
-    #   - dummy_ex
+      # common
+      # - actuator_control
+      # - ftp
+      # - safety_area
+      # # extras
+      # - altitude
+      # - debug_value
+      # - image_pub
+      #   #- mocap_pose_estimate
+      # - px4flow
+      # - vibration
+      #   #- 'vision_*'
+      # - hil
+      # - home_position
+      # - obstacle
+      # - dummy_ex
     plugin_allowlist:
       # common
       - imu
       - command
       - home_position
       - global_position
+      - distance_sensor
+      - rangefinder
+      - sys_time
+      - param
+      - sys_time
       # - dummy_ex
       # - landing_target
     # plugin_allowlist:

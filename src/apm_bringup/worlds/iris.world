@@ -88,7 +88,7 @@
 
     <model name="iris_demo">
       <include>
-        <uri>model://iris_with_ardupilot</uri>
+        <uri>model://iris_rangefinder</uri>
       </include>
     </model>
 

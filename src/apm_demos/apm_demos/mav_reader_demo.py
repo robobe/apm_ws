@@ -2,16 +2,29 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from mavros_msgs.msg import Mavlink
+from mavros.mavlink import convert_to_bytes
+from pymavlink.dialects.v20 import ardupilotmega as apm
 
 DRONE_NO = 1
 TOPIC_MAVLINK_SOURCE = f"/uas{DRONE_NO}/mavlink_source"
 
-class MyNode(Node):
+class fifo(object):
+    """ A simple buffer """
+    def __init__(self):
+        self.buf = []
+    def write(self, data):
+        self.buf += data
+        return len(data)
+    def read(self):
+        return self.buf.pop(0)
+    
+class MavReaderNode(Node):
     def __init__(self) -> None:
         node_name = "read_mav"
         super().__init__(node_name)
-        self.__secs = 0
-        self.__nanosec = 0
+        f = fifo()
+        self.__mav = apm.MAVLink(f, srcSystem=1, srcComponent=1)
+
         self.create_subscription(
             Mavlink,
             TOPIC_MAVLINK_SOURCE,
@@ -21,14 +34,16 @@ class MyNode(Node):
         self.get_logger().info("init mavlink reader demo")
 
     def __mavlink_handler(self, msg: Mavlink) -> None:
-        self.__secs = msg.header.stamp.sec
-        self.__nanosec = msg.header.stamp.nanosec
-        print(type(msg.header.stamp))
+        if msg.msgid in [apm.MAVLINK_MSG_ID_HOME_POSITION]:
+            self.get_logger().info(str(msg))
+            data = convert_to_bytes(msg)
+            mav_msg = self.__mav.decode(data)
+            self.get_logger().info(str(mav_msg))
 
 
 def main(args=None):
     rclpy.init(args=args)
-    node = MyNode()
+    node = MavReaderNode()
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:

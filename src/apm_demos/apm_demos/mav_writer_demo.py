@@ -1,25 +1,34 @@
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
-from rclpy.time import Time as ROSTime
+from rclpy.clock import Clock
+from builtin_interfaces.msg import Time as HTime
 from mavros_msgs.msg import Mavlink
 from builtin_interfaces.msg import Time
 from pymavlink.dialects.v10 import ardupilotmega
 from mavros.mavlink import convert_to_rosmsg
-from pymavlink import mavutil
-import time as py_time
+from pymavlink.dialects.v20 import ardupilotmega as apm
 
 DRONE_NO = 1
 TOPIC_MAVLINK = f"/uas{DRONE_NO}/mavlink_sink"
 
-class MyNode(Node):
+class fifo(object):
+    """ A simple buffer """
+    def __init__(self):
+        self.buf = []
+    def write(self, data):
+        self.buf += data
+        return len(data)
+    def read(self):
+        return self.buf.pop(0)
+
+class MavWriterNode(Node):
     def __init__(self) -> None:
         node_name = "mav_writer"
         super().__init__(node_name)
-        self.__secs = 0
-        self.__nanosec = 0
-        self.conn = mavutil.mavlink_connection("udp:127.0.0.1:14551")
-        self.create_publisher(
+        f = fifo()
+        self.__mav = apm.MAVLink(f, srcSystem=1, srcComponent=1)
+        self.__pub_mavlink = self.create_publisher(
             Mavlink,
             TOPIC_MAVLINK,
             qos_profile=qos_profile_sensor_data,
@@ -29,59 +38,32 @@ class MyNode(Node):
 
     def set_home(self) -> None:
         target_system = 0  # broadcast to everyone
-
-        lattitude = int(41.6996 * 1e7)
-        longitude = int(-86.237177 * 1e7)
-        altitude = int(200 * 1e3)
+        msg = ardupilotmega.MAVLink_command_long_message(
+            target_system,
+            1,
+            ardupilotmega.MAV_CMD_DO_SET_HOME,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        )
         
-        x = 0
-        y = 0
-        z = 0
-        q = [1, 0, 0, 0]   # w x y z
-
-        approach_x = 0
-        approach_y = 0
-        approach_z = 1
-
-        ros_time = ROSTime()
-        time = Time()
-        time.sec, time.nanosec = ros_time.seconds_nanoseconds()
-
-        msg = ardupilotmega.MAVLink_set_home_position_message(
-                target_system,
-                lattitude,
-                longitude,
-                altitude,
-                x,
-                y,
-                z,
-                q,
-                approach_x,
-                approach_y,
-                approach_z)
-        
-        msg.pack(self.conn.mav)
-        
-        
-        payload_bytes = msg.get_payload()
-        
-        payload_bytes = bytearray(payload_bytes)
-        payload_len = len(payload_bytes)
-        print(len(payload_bytes))
-        # payload_octets = payload_len / 8
-        # if payload_len % 8 > 0:
-        #     payload_octets += 1
-        #     payload_bytes += b"\0" * (8 - payload_len % 8)
-        # import struct
-        # print(int(payload_octets))
-        # data = struct.unpack(f"<{7}Q", payload_bytes)
-        raw = convert_to_rosmsg(msg, stamp=time)
-
-
+        msg.pack(self.__mav)
+        # current = Clock().now()
+        # sec, nanosec = current.seconds_nanoseconds()
+        # stamp = HTime(sec=sec, nanosec=nanosec)
+        ros_msg = convert_to_rosmsg(msg) # , stamp=stamp
+        self.__pub_mavlink.publish(ros_msg)
+        print(ros_msg)
+        print("----------------")
 
 def main(args=None):
     rclpy.init(args=args)
-    node = MyNode()
+    node = MavWriterNode()
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
