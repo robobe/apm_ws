@@ -4,20 +4,19 @@ sim_vehicle.py -v ArduCopter -A "--uartB=uart:/dev/pts/3,9600"
 sim_vehicle.py -v ArduCopter -A "--uartF=sim:rf_mavlink"
 ./arducopter -S --model + --speedup 1 --slave 0 --uartF=sim:rf_mavlink --defaults /home/user/wasp_ws/src/wasp_bringup/config/copter.parm,/home/user/wasp_ws/src/wasp_bringup/config/gazebo-iris.parm -I0
 """
-#region imports
-from ament_index_python.packages import get_package_share_directory
 import os
-from launch_ros.actions import Node
+
+# region imports
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import (ExecuteProcess, 
-                            DeclareLaunchArgument,
-                            LogInfo)
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, LogInfo
 from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
 
-
-#endregion
+# endregion
 
 PACKAGE = "apm_bringup"
+
 
 def generate_launch_description():
     ld = LaunchDescription()
@@ -30,23 +29,16 @@ def generate_launch_description():
     additional_parm_arg = DeclareLaunchArgument(
         "additional_parm", default_value="", description="additional SITL parm, full path"
     )
-    additional_parm=LaunchConfiguration("additional_parm")
+    additional_parm = LaunchConfiguration("additional_parm")
     log_info = LogInfo(msg=additional_parm)
-        
+
     # arducopter -S --model gazebo-iris --defaults copter.param,gazebo-iris.param -I0
     spawn_sitl = ExecuteProcess(
-        cmd=[[
-            sitl_executable,
-            ' -S ',
-            "--model + ",
-            f'--defaults {copter_param},{custom_param}',
-            " -I0 "
-        ]],
-        shell=True
+        cmd=[[sitl_executable, " -S ", "--model + ", f"--defaults {copter_param},{custom_param}", " -I0 "]], shell=True
     )
 
     ld.add_action(spawn_sitl)
     # ld.add_action(spawn_mavproxy)
     # ld.add_action(on_sitl_start)
-    
+
     return ld

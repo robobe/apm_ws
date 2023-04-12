@@ -1,23 +1,28 @@
 import rclpy
+from mavros.mavlink import convert_to_bytes
+from mavros_msgs.msg import Mavlink
+from pymavlink.dialects.v20 import ardupilotmega as apm
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
-from mavros_msgs.msg import Mavlink
-from mavros.mavlink import convert_to_bytes
-from pymavlink.dialects.v20 import ardupilotmega as apm
 
 DRONE_NO = 1
 TOPIC_MAVLINK_SOURCE = f"/uas{DRONE_NO}/mavlink_source"
 
+
 class fifo(object):
-    """ A simple buffer """
+    """A simple buffer"""
+
     def __init__(self):
         self.buf = []
+
     def write(self, data):
         self.buf += data
         return len(data)
+
     def read(self):
         return self.buf.pop(0)
-    
+
+
 class MavReaderNode(Node):
     def __init__(self) -> None:
         node_name = "read_mav"

@@ -1,0 +1,4 @@
+RNGFND1_TYPE 10             # mavlink
+RNGFND1_ORIENT 25           # down
+RNGFND1_MAX_CM 1000         # cm
+RNGFND1_MIN_CM 10           # cm

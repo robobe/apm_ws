@@ -1,14 +1,15 @@
 # https://github.com/vincekurtz/ardupilot_gazebo/blob/master/src/pose_republisher.py
+import time
+
 import rclpy
+from geometry_msgs.msg import PoseStamped
+from mavros.mavlink import convert_to_bytes
+from mavros_msgs.msg import Mavlink
+from pymavlink.dialects.v20 import ardupilotmega as MAV_APM
+from pymavlink.dialects.v20.ardupilotmega import MAVLink_message
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from rclpy.time import Time
-from geometry_msgs.msg import PoseStamped
-from mavros_msgs.msg import Mavlink
-from mavros.mavlink import convert_to_bytes
-from pymavlink.dialects.v20 import ardupilotmega as MAV_APM
-from pymavlink.dialects.v20.ardupilotmega import MAVLink_message
-import time
 
 TOPIC_MAVLINK_TO = "/uas1/mavlink_sink"
 TOPIC_MAVLINK_FROM = "/uas1/mavlink_source"
@@ -16,7 +17,7 @@ TOPIC_MAVLINK_FROM = "/uas1/mavlink_source"
 
 class fifo:
     def __init__(self) -> None:
-        self.buf = []
+        self.buf = []  # type: ignore
 
     def write(self, data):
         self.buf += data
@@ -33,9 +34,7 @@ class MyNode(Node):
         self.secs = None
         self.nsecs = None
         self.param_in_topic = self.declare_parameter("in_topic", value="/Robot_1/pose")
-        self.param_out_topic = self.declare_parameter(
-            "out_topic", value="/mavros/mocap/pose"
-        )
+        self.param_out_topic = self.declare_parameter("out_topic", value="/mavros/mocap/pose")
         self.in_topic = self.param_in_topic.value
         self.out_topic = self.param_out_topic.value
 
@@ -82,6 +81,7 @@ class MyNode(Node):
             msg.header.stamp.nanosec = self.nsecs + delay_ns
 
             self.pose_pub.publish(msg)
+
 
 def main(args=None):
     rclpy.init(args=args)

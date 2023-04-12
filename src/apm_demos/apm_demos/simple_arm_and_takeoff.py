@@ -1,8 +1,15 @@
 import rclpy
+from mavros_msgs.msg import Altitude, State
+from mavros_msgs.srv import CommandBool, CommandTOL, MessageInterval, SetMode
 from rclpy.node import Node
-from mavros_msgs.srv import CommandBool, SetMode, CommandTOL, MessageInterval
-from mavros_msgs.msg import State, Altitude
-from rclpy.qos import qos_profile_system_default, qos_profile_sensor_data, QoSProfile, ReliabilityPolicy, HistoryPolicy, DurabilityPolicy
+from rclpy.qos import (
+    DurabilityPolicy,
+    HistoryPolicy,
+    QoSProfile,
+    ReliabilityPolicy,
+    qos_profile_sensor_data,
+    qos_profile_system_default,
+)
 
 TOPIC_STATE = "/mavros/state"
 TOPIC_ALTITUDE = "/mavros/altitude"
@@ -10,14 +17,17 @@ SERVICE_MODE = "/mavros/set_mode"
 SERVICE_ARMING = "/mavros/cmd/arming"
 SERVICE_TAKEOFF = "/mavros/cmd/takeoff"
 SERVICE_MESSAGE_INTERVAL = "/mavros/set_message_interval"
-qos_mavros_policy = QoSProfile(reliability=ReliabilityPolicy.BEST_EFFORT,
-                        history=HistoryPolicy.KEEP_LAST,
-                        durability=DurabilityPolicy.VOLATILE,
-                        depth=1)
+qos_mavros_policy = QoSProfile(
+    reliability=ReliabilityPolicy.BEST_EFFORT,
+    history=HistoryPolicy.KEEP_LAST,
+    durability=DurabilityPolicy.VOLATILE,
+    depth=1,
+)
+
 
 class MyNode(Node):
     def __init__(self):
-        node_name="minimal"
+        node_name = "minimal"
         self.__state = State()
         self.__altitude = Altitude()
         self.__tmp_one_time = True
@@ -42,7 +52,7 @@ class MyNode(Node):
         if not self.__state.connected:
             self.get_logger().warning("Drone not connected")
             return
-        
+
         if not self.__state.guided or self.__state.mode != "GUIDED":
             self.get_logger().info("Set mode to guided")
             msg = SetMode.Request()
@@ -62,13 +72,13 @@ class MyNode(Node):
             msg.altitude = 5.0
             self.__srv_takeoff.call_async(msg)
 
-            
     def __state_handler(self, msg: State):
         self.__state = msg
 
     def __altitude_handler(self, msg: Altitude):
         print(msg)
         self.__altitude = msg
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -77,5 +87,6 @@ def main(args=None):
     node.destroy_node()
     rclpy.shutdown()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

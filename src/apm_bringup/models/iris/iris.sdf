@@ -51,6 +51,19 @@
       </visual>
       <gravity>1</gravity>
       <velocity_decay/>
+      <sensor name="gps_sensor" type="gps">
+        <always_on>true</always_on>
+        <update_rate>10</update_rate>
+        <plugin name="gps_controller" filename="libgazebo_ros_gps_sensor.so">
+            <ros>
+                <!-- <namespace>/br</namespace> -->
+                <remapping>gps_controller/out:=gps_pos</remapping>
+                <remapping>gps_controller/vel:=gps_vel</remapping>
+
+            </ros>
+            <frame_name>base_link</frame_name>
+        </plugin>
+    </sensor>
     </link>
     <link name='/imu_link'>
       <pose>0 0 0 0 0 0</pose>

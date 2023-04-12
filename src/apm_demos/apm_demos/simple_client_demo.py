@@ -1,18 +1,18 @@
 import rclpy
-from rclpy.node import Node
 from example_interfaces.srv import AddTwoInts
+from rclpy.node import Node
+
 
 class MyNode(Node):
     def __init__(self):
-        node_name="simple_client"
+        node_name = "simple_client"
         super().__init__(node_name)
-        self.cli = self.create_client(AddTwoInts, '/add_two_ints')
+        self.cli = self.create_client(AddTwoInts, "/add_two_ints")
         while not self.cli.wait_for_service(timeout_sec=1.0):
-            self.get_logger().info('service not available, waiting again...')
+            self.get_logger().info("service not available, waiting again...")
         self.get_logger().info("Start node call service")
-        self.create_timer(1/2, self.__timer_handler)
+        self.create_timer(1 / 2, self.__timer_handler)
         self.send_request(1, 2)
-        
 
     def __timer_handler(self):
         self.get_logger().info("timer cb")
@@ -26,6 +26,7 @@ class MyNode(Node):
         resp = self.future.result()
         self.get_logger().info(f"response / result {resp}")
 
+
 def main(args=None):
     rclpy.init(args=args)
     node = MyNode()
@@ -37,5 +38,6 @@ def main(args=None):
         node.destroy_node()
         rclpy.try_shutdown()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

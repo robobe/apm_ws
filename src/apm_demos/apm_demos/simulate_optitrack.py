@@ -1,30 +1,31 @@
+import diagnostic_updater
 import rclpy
-from rclpy.node import Node
-from rclpy.qos import qos_profile_sensor_data
-from mavros_msgs.msg import Mavlink
 from gazebo_msgs.srv import GetEntityState
 from geometry_msgs.msg import PoseStamped
-
-import diagnostic_updater
-import diagnostic_msgs
+from mavros_msgs.msg import Mavlink
+from rclpy.node import Node
+from rclpy.qos import qos_profile_sensor_data
 
 DRONE_NO = 1
 TOPIC_POSE = f"/Robot_{DRONE_NO}/pose"
 TOPIC_MAVLINK_SOURCE = f"/uas{DRONE_NO}/mavlink_source"
 SRV_GAZEBO_ENTITY_STATE = "/gazebo/get_entity_state"
-TIMER_TICK = 1/30
-TIMER_STATE_REQUEST = 1/10
+TIMER_TICK = 1 / 30
+TIMER_STATE_REQUEST = 1 / 10
+
+
 class DiagHelper:
     def __init__(self, node: Node) -> None:
         self.__updater = diagnostic_updater.Updater(node)
         self.pub1_freq = diagnostic_updater.HeaderlessTopicDiagnostic(
             "topic1",
             self.__updater,
-            diagnostic_updater.FrequencyStatusParam({'min':40, 'max':60}, 0.1, 10),
+            diagnostic_updater.FrequencyStatusParam({"min": 40, "max": 60}, 0.1, 10),
         )
 
     def update(self) -> None:
         self.__updater.update()
+
 
 class MyNode(Node):
     def __init__(self) -> None:
@@ -69,7 +70,7 @@ class MyNode(Node):
         pose_stamped.pose = self.__pose
 
         self.__pub_pose.publish(pose_stamped)
-        self.__seq +=1
+        self.__seq += 1
 
     def __mavlink_handler(self, msg: Mavlink) -> None:
         self.__secs = msg.header.stamp.sec

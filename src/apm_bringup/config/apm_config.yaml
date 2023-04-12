@@ -36,7 +36,7 @@
       - rangefinder
       - sys_time
       - param
-      - sys_time
+      # - sys_time
       # - dummy_ex
       # - landing_target
     # plugin_allowlist:
@@ -204,7 +204,11 @@
       rangefinder_sub:
         subscriber: true
         id: 1
-        orientation: PITCH_270  # only that orientation are supported by APM 3.4+
+        orientation: PITCH_270
+      rangefinder_fwd:
+        subscriber: true
+        id: 2
+        orientation: PITCH_180
 
 # image_pub
 /mavros/**/image:

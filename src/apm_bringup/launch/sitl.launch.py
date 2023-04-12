@@ -7,21 +7,22 @@ sim_vehicle.py -v ArduCopter -A "--uartB=uart:/dev/pts/3,9600"
 sim_vehicle.py -v ArduCopter -A "--uartF=sim:rf_mavlink"
 ./arducopter -S --model + --speedup 1 --slave 0 --uartF=sim:rf_mavlink --defaults /home/user/wasp_ws/src/wasp_bringup/config/copter.parm,/home/user/wasp_ws/src/wasp_bringup/config/gazebo-iris.parm -I0
 """
-#region imports
+# region imports
 import os
+
 from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription, LaunchContext
-from launch.actions import ExecuteProcess, DeclareLaunchArgument
+from launch import LaunchContext, LaunchDescription
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction
 from launch.substitutions import LaunchConfiguration
-from launch.actions import OpaqueFunction
-#endregion
+
+# endregion
 
 PACKAGE = "apm_bringup"
-BINARY="arducopter"
-COMMON_PARAM="copter.parm"
-GAZEBO_PARAM="gazebo-iris.parm"
+BINARY = "arducopter"
+COMMON_PARAM = "copter.parm"
+GAZEBO_PARAM = "gazebo-iris.parm"
 
-CUSTOM_ARG="custom_param"
+CUSTOM_ARG = "custom_param"
 
 
 def build_sitl_command(context: LaunchContext, arg1: LaunchConfiguration):
@@ -30,7 +31,7 @@ def build_sitl_command(context: LaunchContext, arg1: LaunchConfiguration):
     copter_param = os.path.join(pkg, "config", COMMON_PARAM)
     gazebo_param = os.path.join(pkg, "config", GAZEBO_PARAM)
     custom_param = context.perform_substitution(arg1)
-    
+
     params_files = [copter_param, gazebo_param]
     if custom_param:
         custom_param = os.path.join(pkg, "config", custom_param)
@@ -39,28 +40,24 @@ def build_sitl_command(context: LaunchContext, arg1: LaunchConfiguration):
     params = ",".join(params_files)
     print(params)
     sitl = ExecuteProcess(
-        cmd=[[
-            sitl_executable,
-            ' -S ',
-            "--model gazebo-iris ",
-            f'--defaults {params} ',
-            " -I0"
-        ]],
-        shell=True
+        cmd=[[sitl_executable, " -S ", "--model gazebo-iris ", f"--defaults {params} ", " -I0"]], shell=True
     )
 
     return [sitl]
 
+
 def generate_launch_description():
     ld = LaunchDescription()
     custom_param_arg = DeclareLaunchArgument(
-        CUSTOM_ARG, default_value="", description="additional SITL parm name only, load from config folder, append to end of params list"
+        CUSTOM_ARG,
+        default_value="",
+        description="additional SITL parm name only, load from config folder, append to end of params list",
     )
-    custom_param=LaunchConfiguration(CUSTOM_ARG)
+    custom_param = LaunchConfiguration(CUSTOM_ARG)
 
     func_action = OpaqueFunction(function=build_sitl_command, args=[custom_param])
 
     ld.add_action(custom_param_arg)
     ld.add_action(func_action)
-    
+
     return ld

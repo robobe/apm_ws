@@ -1,0 +1,18 @@
+session_name: 4-pane-split
+windows:
+  - window_name: dev window
+    layout: tiled
+    shell_command_before:
+      - cd ~/apm_ws # run as a first command in all panes
+      - ros_ws
+    panes:
+      - shell_command: # run sitl only no gazebo with DEBUG
+          - cd /home/user/git/ardupilot/Tools/autotest
+          - ./sim_vehicle.py -v ArduCopter -f quad -D
+      - shell_command:
+          - sleep 5
+          - /home/user/.local/bin/mavproxy.py --master tcp:127.0.0.1:5760 --out 127.0.0.1:14550 --out 127.0.0.1:14551
+      - shell_command:
+          - echo free # pane no. 4
+          
+      

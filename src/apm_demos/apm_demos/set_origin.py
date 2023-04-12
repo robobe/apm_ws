@@ -1,11 +1,12 @@
-import rclpy
-from rclpy.node import Node
-from mavros_msgs.msg import Mavlink
-from mavros.mavlink import convert_to_rosmsg
-from pymavlink.dialects.v20 import ardupilotmega as MAV_APM
-from rclpy.time import Time as ROSTime
-from builtin_interfaces.msg import Time
 import time
+from typing import Any, List
+
+import rclpy
+from builtin_interfaces.msg import Time
+from mavros.mavlink import convert_to_rosmsg
+from mavros_msgs.msg import Mavlink
+from pymavlink.dialects.v20 import ardupilotmega as MAV_APM
+from rclpy.node import Node
 
 # Global position of the origin
 LAT = int(41.6996 * 1e7)
@@ -14,9 +15,10 @@ ALT = int(200 * 1e3)
 
 TOPIC_MAVLINK_TO = "/uas1/mavlink_sink"
 
+
 class fifo:
     def __init__(self) -> None:
-        self.buf = []
+        self.buf: List[Any] = []
 
     def write(self, data):
         self.buf += data
@@ -28,7 +30,7 @@ class fifo:
 
 class MyNode(Node):
     def __init__(self):
-        node_name="set_origin"
+        node_name = "set_origin"
         super().__init__(node_name)
         self.mavlink_pub = self.create_publisher(Mavlink, TOPIC_MAVLINK_TO, 10)
         self.timer = self.create_timer(1.0, self.__timer_handler)
@@ -46,17 +48,13 @@ class MyNode(Node):
         Send a mavlink SET_GPS_GLOBAL_ORIGIN message, which allows us
         to use local position information without a GPS.
         """
-        #target_system = mav.srcSystem
-        target_system = 0   # 0 --> broadcast to everyone
+        # target_system = mav.srcSystem
+        target_system = 0  # 0 --> broadcast to everyone
         lattitude = LAT
         longitude = LON
         altitude = ALT
 
-        msg = MAV_APM.MAVLink_set_gps_global_origin_message(
-                target_system,
-                lattitude, 
-                longitude,
-                altitude)
+        msg = MAV_APM.MAVLink_set_gps_global_origin_message(target_system, lattitude, longitude, altitude)
         self.send_message(msg)
 
     def __timer_handler(self):
@@ -78,30 +76,21 @@ class MyNode(Node):
         lattitude = LAT
         longitude = LON
         altitude = ALT
-        
+
         x = 0
         y = 0
         z = 0
-        q = [1, 0, 0, 0]   # w x y z
+        q = [1, 0, 0, 0]  # w x y z
 
         approach_x = 0
         approach_y = 0
         approach_z = 1
 
         msg = MAV_APM.MAVLink_set_home_position_message(
-                target_system,
-                lattitude,
-                longitude,
-                altitude,
-                x,
-                y,
-                z,
-                q,
-                approach_x,
-                approach_y,
-                approach_z)
+            target_system, lattitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z
+        )
         self.send_message(msg)
-    
+
     def send_message(self, msg):
         msg.pack(self.mav)
         # ros_time = ROSTime()
@@ -110,8 +99,9 @@ class MyNode(Node):
         t.nanosec = 1
         # t.sec, t.nanosec = ros_time.seconds_nanoseconds()
         rosmsg = convert_to_rosmsg(msg, stamp=t)
-        
-        #self.mavlink_pub.publish(rosmsg)
+
+        self.mavlink_pub.publish(rosmsg)
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -124,5 +114,6 @@ def main(args=None):
         node.destroy_node()
         rclpy.try_shutdown()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
