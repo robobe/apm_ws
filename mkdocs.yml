@@ -1,0 +1,12 @@
+site_name: My Docs
+theme:
+  name: "readthedocs"
+
+plugins:
+  - search
+  - mkdocstrings
+
+markdown_extensions:
+    - mkdocs-click
+watch:
+  - .  # reload docs for any file changes

@@ -1,3 +1,8 @@
+"""
+module doctring
+"""
+from typing import List
+
 from pymavlink import mavutil
 
 master = mavutil.mavlink_connection("udp:127.0.0.1:14550")
@@ -18,3 +23,27 @@ master.mav.command_long_send(
     0,
     0,
 )
+
+
+def foo() -> None:
+    """_summary_"""
+
+
+def hello(a: List, b: int = 0) -> bool:
+    """_summary_
+
+    Args:
+        a (List): _description_
+        b (int, optional): _description_. Defaults to 0.
+
+    Raises:
+        Exception: _description_
+
+    Returns:
+        bool: _description_
+    """
+    print(a)
+    print(b)
+    if b:
+        raise Exception("new demo exception")
+    return True

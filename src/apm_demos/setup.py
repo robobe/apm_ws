@@ -22,8 +22,8 @@ def package_files(data_files, directory_list):
                 else:
                     paths_dict[install_path] = [file_path]
 
-    for key in paths_dict.keys():
-        data_files.append((key, paths_dict[key]))
+    for key, folder in paths_dict.items():
+        data_files.append((key, folder))
 
     return data_files
 
