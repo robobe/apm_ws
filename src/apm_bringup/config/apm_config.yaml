@@ -1,9 +1,9 @@
 # Common configuration for APM2 autopilot
 #
 # node:
-/mavros_node:
-  ros__parameters:
-    fcu_url: udp://127.0.0.1:14551@
+# /mavros_node:
+#   ros__parameters:
+    # fcu_url: udp://127.0.0.1:14551@
 
 /mavros/**:
   ros__parameters:
@@ -28,6 +28,7 @@
       # - dummy_ex
     plugin_allowlist:
       # common
+      - sys_status
       - imu
       - command
       - home_position
@@ -36,7 +37,6 @@
       - rangefinder
       - sys_time
       - param
-      # - sys_time
       # - dummy_ex
       # - landing_target
     # plugin_allowlist:

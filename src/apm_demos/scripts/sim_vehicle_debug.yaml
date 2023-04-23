@@ -1,0 +1,13 @@
+session_name: apm
+windows:
+  - window_name: sim_vehicle debug
+    layout: tiled
+    shell_command_before:
+      - apm
+    panes:
+      - shell_command:
+          - sim_vehicle.py -v ArduCopter -f quad -D --no-mavproxy
+
+# --add-param-file
+          
+      

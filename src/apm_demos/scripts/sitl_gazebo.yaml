@@ -1,0 +1,21 @@
+session_name: apm
+windows:
+  - window_name: gazebo sitl mavros
+    layout: tiled
+    shell_command_before:
+      - cd ~/apm_ws
+      - ros_ws
+    panes:
+      - shell_command: # pane no. 1
+          - pkill -9 gzserver
+          - pkill -9 gzclient
+          - sleep 1
+          - ros2 launch apm_bringup sim.launch.py
+      - shell_command:
+          - rm eeprom.bin mav.*
+          - sleep 5
+          - ros2 launch apm_bringup sitl.launch.py
+      - shell_command:
+          - sleep 7
+          - ros2 run mavros mavros_node --ros-args -p fcu_url:=tcp://127.0.0.1:5760@ -p gcs_url:=udp://@localhost --params-file ~/apm_ws/src/apm_bringup/config/apm_config.yaml
+      - echo run

@@ -1,3 +1,3 @@
 #!/bin/sh
 
-tmuxp load ./apm_time_sync.yaml
+tmuxp load $HOME/apm_ws/src/apm_demos/scripts/apm_time_sync.yaml

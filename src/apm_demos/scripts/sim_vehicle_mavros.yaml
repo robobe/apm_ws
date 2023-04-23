@@ -1,0 +1,17 @@
+session_name: 4-pane-split
+windows:
+  - window_name: dev window
+    layout: tiled
+    shell_command_before:
+      - apm
+      - ros_ws
+    panes:
+      - shell_command:
+          - sim_vehicle.py -v ArduCopter -f quad -D --no-mavproxy
+      - shell_command:
+          - sleep 5
+          - ros2 run mavros mavros_node --ros-args -p fcu_url:=tcp://127.0.0.1:5760@ --params-file ~/apm_ws/src/apm_bringup/config/apm_config.yaml
+      - shell_command:
+          - echo free # pane no. 4
+          
+      

@@ -1,0 +1,16 @@
+session_name: apm
+windows:
+  - window_name: sitl_with_mavros
+    layout: tiled
+    shell_command_before:
+      - cd ~/apm_ws # run as a first command in all panes
+      - ros_ws
+    panes:
+      - shell_command:
+          - rm eeprom.bin mav.*
+          - /home/user/git/ardupilot/Tools/autotest/sim_vehicle.py  -v ArduCopter -f quad -D
+      - shell_command:
+          - sleep 2
+          - ros2 run mavros mavros_node --ros-args --params-file ~/apm_ws/src/apm_bringup/config/apm_config.yaml
+      - shell_command:
+          - echo free

@@ -47,7 +47,7 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "test=apm_demos.simple_arm_and_takeoff:main",
+            "arm_and_takeoff=apm_demos.simple_arm_and_takeoff:main",
             "simulate_optitrack=apm_demos.simulate_optitrack:main",
             "pose_republisher=apm_demos.pose_republisher:main",
             "set_origin=apm_demos.set_origin:main",
@@ -58,7 +58,8 @@ setup(
             "simple_client=apm_demos.simple_client_demo:main",
             "rangefinder=apm_demos.rangefinder_demo:main",
             "param_demo=apm_demos.params_demo:main",
-            "timesync=apm_demos.mav_long_command_demo:main",
+            "arm_long_cmd=apm_demos.mav_long_command_demo:main",
+            "pland=apm_demos.pland_demo:main",
         ],
     },
 )

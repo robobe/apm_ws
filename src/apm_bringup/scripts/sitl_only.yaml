@@ -1,0 +1,9 @@
+session_name: apm
+windows:
+  - window_name: dev window
+    layout: tiled
+    shell_command_before:
+      - apm # alias source apm.sh
+    panes:
+      - shell_command:
+          - sim_vehicle.py  -v ArduCopter -f quad -D --no-mavproxy

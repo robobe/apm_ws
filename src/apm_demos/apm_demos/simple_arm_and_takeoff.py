@@ -1,6 +1,12 @@
+"""mavros mode,arm,takeoff
+
+RUN: sitl_gazebo.sh
+RUN: ros2 run apm_demos arm_and_takeoff
+"""
 import rclpy
 from mavros_msgs.msg import Altitude, State
 from mavros_msgs.srv import CommandBool, CommandTOL, MessageInterval, SetMode
+from pymavlink.dialects.v20 import ardupilotmega
 from rclpy.node import Node
 from rclpy.qos import (
     DurabilityPolicy,
@@ -17,12 +23,15 @@ SERVICE_MODE = "/mavros/set_mode"
 SERVICE_ARMING = "/mavros/cmd/arming"
 SERVICE_TAKEOFF = "/mavros/cmd/takeoff"
 SERVICE_MESSAGE_INTERVAL = "/mavros/set_message_interval"
+
 qos_mavros_policy = QoSProfile(
     reliability=ReliabilityPolicy.BEST_EFFORT,
     history=HistoryPolicy.KEEP_LAST,
     durability=DurabilityPolicy.VOLATILE,
     depth=1,
 )
+
+TAKEOFF_ALT = 5.0
 
 
 class MyNode(Node):
@@ -40,7 +49,7 @@ class MyNode(Node):
         self.__srv_set_msg_interval = self.create_client(MessageInterval, SERVICE_MESSAGE_INTERVAL)
         self.__srv_set_msg_interval.wait_for_service(timeout_sec=1.0)
         msg = MessageInterval.Request()
-        msg.message_id = 29
+        msg.message_id = ardupilotmega.MAVLINK_MSG_ID_SCALED_PRESSURE
         msg.message_rate = 1.0
         self.__srv_set_msg_interval.call_async(msg)
         # self.__srv_mode.wait_for_service()
@@ -69,7 +78,7 @@ class MyNode(Node):
             self.__tmp_one_time = False
             self.get_logger().info("Try to Takeoff")
             msg = CommandTOL.Request()
-            msg.altitude = 5.0
+            msg.altitude = TAKEOFF_ALT
             self.__srv_takeoff.call_async(msg)
 
     def __state_handler(self, msg: State):
