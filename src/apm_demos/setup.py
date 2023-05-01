@@ -60,6 +60,7 @@ setup(
             "param_demo=apm_demos.params_demo:main",
             "arm_long_cmd=apm_demos.mav_long_command_demo:main",
             "pland=apm_demos.pland_demo:main",
+            "viso=apm_demos.viso_estimate:main",
         ],
     },
 )

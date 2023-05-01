@@ -37,6 +37,7 @@
       - rangefinder
       - sys_time
       - param
+      - vision_pose
       # - dummy_ex
       # - landing_target
     # plugin_allowlist:
@@ -64,7 +65,7 @@
 # sys_time
 /mavros/**/time:
   ros__parameters:
-    time_ref_source: "fcu"  # time_reference source
+    time_ref_source: "epoc"  # time_reference source
     timesync_mode: MAVLINK
     timesync_avg_alpha: 0.6 # timesync averaging factor
 

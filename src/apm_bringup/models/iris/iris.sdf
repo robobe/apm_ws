@@ -55,15 +55,15 @@
         <always_on>true</always_on>
         <update_rate>10</update_rate>
         <plugin name="gps_controller" filename="libgazebo_ros_gps_sensor.so">
-            <ros>
-                <!-- <namespace>/br</namespace> -->
-                <remapping>gps_controller/out:=gps_pos</remapping>
-                <remapping>gps_controller/vel:=gps_vel</remapping>
+          <ros>
+            <!-- <namespace>/br</namespace> -->
+            <remapping>gps_controller/out:=gps_pos</remapping>
+            <remapping>gps_controller/vel:=gps_vel</remapping>
 
-            </ros>
-            <frame_name>base_link</frame_name>
+          </ros>
+          <frame_name>base_link</frame_name>
         </plugin>
-    </sensor>
+      </sensor>
     </link>
     <link name='/imu_link'>
       <pose>0 0 0 0 0 0</pose>
@@ -83,6 +83,19 @@
         <pose>0 0 0 3.141593 0 0</pose>
         <always_on>1</always_on>
         <update_rate>1000.0</update_rate>
+      </sensor>
+      <sensor name="gz_imu" type="imu">
+        <always_on>true</always_on>
+        <!-- Publish at 30 hz -->
+        <update_rate>30</update_rate>
+        <plugin name="my_imu_plugin" filename="libgazebo_ros_imu_sensor.so">
+          <ros>
+            <!-- Will publish to /imu/data -->
+            <namespace>/imu</namespace>
+            <remapping>~/out:=data</remapping>
+          </ros>
+          <!-- frame_name ommited, will be "my_link" -->
+        </plugin>
       </sensor>
     </link>
     <joint name='/imu_joint' type='revolute'>
@@ -363,7 +376,7 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
-    
+
     <plugin name="rotor_0_blade_1" filename="libLiftDragPlugin.so">
       <a0>0.3</a0>
       <alpha_stall>1.4</alpha_stall>

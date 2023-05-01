@@ -6,3 +6,4 @@ disable=
 
 [FORMAT]
 max-line-length=120
+good-names=_,x,y,dx,dy,x1,y1

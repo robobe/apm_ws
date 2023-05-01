@@ -17,5 +17,7 @@ windows:
           - ros2 launch apm_bringup sitl.launch.py
       - shell_command:
           - sleep 7
+          - cd ~/mavros_ws
+          - ros_ws
           - ros2 run mavros mavros_node --ros-args -p fcu_url:=tcp://127.0.0.1:5760@ -p gcs_url:=udp://@localhost --params-file ~/apm_ws/src/apm_bringup/config/apm_config.yaml
       - echo run

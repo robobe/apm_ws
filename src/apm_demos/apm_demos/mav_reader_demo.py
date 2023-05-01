@@ -39,7 +39,7 @@ class MavReaderNode(Node):
         self.get_logger().info("init mavlink reader demo")
 
     def __mavlink_handler(self, msg: Mavlink) -> None:
-        if msg.msgid in [apm.MAVLINK_MSG_ID_HEARTBEAT]:
+        if msg.msgid in [apm.MAVLINK_MSG_ID_HEARTBEAT, apm.MAVLINK_MSG_ID_SYSTEM_TIME]:
             self.get_logger().info(str(msg))
             data = convert_to_bytes(msg)
             mav_msg = self.__mav.decode(data)
