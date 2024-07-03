@@ -47,18 +47,18 @@ class ObjectTracker(Node):
                 [x + w, y, 0],
                 [x + w, y + h, 0],
                 [x, y + h, 0]
-            ])
+            ],dtype=np.float32)
         
         img_p = np.array([
             (x, y),
             (x + w, y),
             (x + w, y + h),
             (x, y + h)
-        ])
+        ],dtype=np.float32)
 
-        # 3d points
-        img_p = np.zeros((6*9,3), np.float32)
-        img_p[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
+        # # 3d points
+        # img_p = np.zeros((6*9,3), np.float32)
+        # img_p[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
 
         print(x,y,w,h)
         size = (640, 480)
@@ -69,7 +69,6 @@ class ObjectTracker(Node):
         )
         dist_coeffs = np.zeros((4,1)) # no lens distortion
         _, rvec, tvec = cv2.solvePnP(obj_p, img_p, camera_matrix, dist_coeffs)
-
         # Convert rotation vector to Euler angles
         rmat, _ = cv2.Rodrigues(rvec)
         pitch = math.atan2(rmat[2, 0], rmat[2, 2])
