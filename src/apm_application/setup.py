@@ -20,6 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            "od=apm_application.object_detection:main"
         ],
     },
 )

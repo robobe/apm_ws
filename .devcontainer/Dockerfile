@@ -5,7 +5,13 @@ FROM humble:dev
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
    && apt-get -y install --no-install-recommends \
-    python3-wxgtk4.0 \
+      # remove after build humble:dev again
+      ros-humble-gazebo-ros-pkgs \
+      # python package
+      python3-wxgtk4.0 \
+      # ros packages
+      ros-humble-cv-bridge \
+    ros-humble-rosbridge-suite \
    && apt-get autoremove -y \
    && apt-get clean -y \
    && rm -rf /var/lib/apt/lists/*
