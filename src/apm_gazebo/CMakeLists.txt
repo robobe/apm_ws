@@ -16,16 +16,16 @@ link_directories(${GAZEBO_LIBRARY_DIRS})
 # list(APPEND CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
 
 
-# add_library(GimbalControllerPlugin SHARED GimbalControllerPlugin.cc)
-# target_link_libraries(GimbalControllerPlugin ${GAZEBO_LIBRARIES})
-# target_include_directories(GimbalControllerPlugin PRIVATE ../include)
+add_library(GimbalControllerPlugin SHARED src/GimbalControllerPlugin.cc)
+target_link_libraries(GimbalControllerPlugin ${GAZEBO_LIBRARIES})
+target_include_directories(GimbalControllerPlugin PRIVATE include)
 
 add_library(ArduPilotPlugin SHARED src/ArduPilotPlugin.cc)
 target_link_libraries(ArduPilotPlugin ${GAZEBO_LIBRARIES})
 target_include_directories(ArduPilotPlugin PRIVATE include)
 
 install(TARGETS
-# GimbalControllerPlugin
+GimbalControllerPlugin
 ArduPilotPlugin
   DESTINATION ${PROJECT_SOURCE_DIR}/bin
 )

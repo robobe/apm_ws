@@ -12,5 +12,5 @@ RUN apt-get update \
 ENV DEBIAN_FRONTEND=dialog
 
 
-# COPY .devcontainer/requirements.txt requirements.txt
-# RUN pip3 install -r requirements.txt
+COPY .devcontainer/requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt

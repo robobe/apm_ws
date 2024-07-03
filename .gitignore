@@ -11,3 +11,4 @@ mav.tlog*
 archives
 patches
 callgrind*
+*/apm_gazebo/bin/*
