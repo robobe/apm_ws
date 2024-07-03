@@ -10,7 +10,6 @@ from geometry_msgs.msg import TransformStamped
 from tf2_ros import TransformBroadcaster
 
 CAMERA_TOPIC = "/gimbal_camera/image_raw"
-AXIS = np.float32([[1.2,0,0], [0,1.2,0], [0,0,-1.2]]).reshape(-1,3)
 
 class ObjectTracker(Node):
     def __init__(self):

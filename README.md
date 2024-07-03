@@ -24,3 +24,7 @@ mode GUIDED
 arm throttle
 takeoff 5
 ```
+
+
+# Resource
+- [aruco markers](https://github.com/joselusl/aruco_gazebo/tree/master)
