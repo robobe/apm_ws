@@ -1,0 +1,9 @@
+{
+    "python.analysis.extraPaths": [
+        "/opt/ros/humble/lib",
+        "${workspaceFolder}",
+        "/usr/local/lib/python3.10/dist-packages",
+        "/usr/lib/python3/dist-packages",
+        "/home/user/.local/lib/python3.10/site-packages/"
+    ]
+}
